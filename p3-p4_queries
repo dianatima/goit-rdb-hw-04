@@ -12,7 +12,7 @@ INNER JOIN products p ON p.id=od.product_id
 INNER JOIN categories cat ON cat.id=p.category_id
 INNER JOIN suppliers sup ON sup.id=p.supplier_id;
 
-———————————————————————————————————
+———————————————————————————————————-
 p4_1:
 
 Select count(*) 
