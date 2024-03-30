@@ -1,0 +1,121 @@
+USE bd3;
+
+p3:
+
+Select * 
+FROM orders o
+INNER JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+INNER JOIN employees e ON e.employee_id=o.employee_id
+INNER JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+INNER JOIN categories cat ON cat.id=p.category_id
+INNER JOIN suppliers sup ON sup.id=p.supplier_id;
+
+———————————————————————————————————
+p4_1:
+
+Select count(*) 
+FROM orders o
+INNER JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+INNER JOIN employees e ON e.employee_id=o.employee_id
+INNER JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+INNER JOIN categories cat ON cat.id=p.category_id
+INNER JOIN suppliers sup ON sup.id=p.supplier_id;
+
+———————————————————————————————————
+p4_2:
+
+Select count(*) 
+FROM orders o
+LEFT JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+RIGHT JOIN employees e ON e.employee_id=o.employee_id
+LEFT JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+LEFT JOIN categories cat ON cat.id=p.category_id
+RIGHT JOIN suppliers sup ON sup.id=p.supplier_id;
+
+ВИСНОВОК: В нашому випадку кількість рядків не змінилася, оскільки всі рядки у лівих таблицях мали відовідність у правих таблицях і навпаки. Якби відповідності всім полям не було, то при INNER JOIN ми б отримали меншу кількість рядків, а при LEFT/RIGHT JOIN більшу, оскільки результат включав би всі рядки лівої/правої таблиці.
+
+———————————————————————————————————
+p4_3:
+
+Select count(*) 
+FROM orders o
+INNER JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+INNER JOIN employees e ON e.employee_id=o.employee_id
+INNER JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+INNER JOIN categories cat ON cat.id=p.category_id
+RIGHT JOIN suppliers sup ON sup.id=p.supplier_id
+WHERE e.employee_id > 3 and e.employee_id <= 10;
+
+———————————————————————————————————
+p4_4:
+
+Select cat.name, count(*), avg(od.quantity)
+FROM orders o
+INNER JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+INNER JOIN employees e ON e.employee_id=o.employee_id
+INNER JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+INNER JOIN categories cat ON cat.id=p.category_id
+RIGHT JOIN suppliers sup ON sup.id=p.supplier_id
+WHERE e.employee_id > 3 and e.employee_id <= 10
+GROUP BY cat.name;
+
+———————————————————————————————————
+p4_5:
+
+Select cat.name, count(*), avg(od.quantity)
+FROM orders o
+INNER JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+INNER JOIN employees e ON e.employee_id=o.employee_id
+INNER JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+INNER JOIN categories cat ON cat.id=p.category_id
+RIGHT JOIN suppliers sup ON sup.id=p.supplier_id
+WHERE e.employee_id > 3 and e.employee_id <= 10
+GROUP BY cat.name
+HAVING avg(od.quantity) > 21;
+
+———————————————————————————————————
+p4_6:
+
+Select cat.name, count(*), avg(od.quantity)
+FROM orders o
+INNER JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+INNER JOIN employees e ON e.employee_id=o.employee_id
+INNER JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+INNER JOIN categories cat ON cat.id=p.category_id
+RIGHT JOIN suppliers sup ON sup.id=p.supplier_id
+WHERE e.employee_id > 3 and e.employee_id <= 10
+GROUP BY cat.name
+HAVING avg(od.quantity) > 21
+ORDER BY count(*) desc;
+
+———————————————————————————————————
+p4_7:
+
+Select cat.name, count(*), avg(od.quantity)
+FROM orders o
+INNER JOIN order_details od ON od.order_id=o.id
+INNER JOIN customers c ON c.id=o.customer_id
+INNER JOIN employees e ON e.employee_id=o.employee_id
+INNER JOIN shippers s ON s.id=o.shipper_id
+INNER JOIN products p ON p.id=od.product_id
+INNER JOIN categories cat ON cat.id=p.category_id
+RIGHT JOIN suppliers sup ON sup.id=p.supplier_id
+WHERE e.employee_id > 3 and e.employee_id <= 10
+GROUP BY cat.name
+HAVING avg(od.quantity) > 21
+ORDER BY count(*) desc
+LIMIT 4 OFFSET 1;
